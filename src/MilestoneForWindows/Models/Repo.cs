@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using MilestoneForWindows.Aspects;
 using NGitHub.Models;
 
 namespace MilestoneForWindows.Models

@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Windows;
 using Caliburn.Micro;
-using MilestoneForWindows.Aspects;
 
 namespace MilestoneForWindows.ViewModels
 {
