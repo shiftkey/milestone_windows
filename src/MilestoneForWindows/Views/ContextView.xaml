@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="MilestoneForWindows.Views.ContextView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Models="clr-namespace:NGitHub.Models;assembly=NGitHub"
+             xmlns:Converters="clr-namespace:MilestoneForWindows.Converters" mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:LessThanOneHiddenConverter x:Key="LessThanOneHiddenConverter" />
+        <DataTemplate DataType="{x:Type Models:Issue}">
+            <StackPanel>
+                <TextBlock Text="{Binding Title}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel Margin="5">
+            <Image Source="{Binding User.AvatarUrl}" Width="96" Height="96" Stretch="UniformToFill"/>
+
+            <!--<TextBlock Text="pull requests" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
+            <ListBox x:Name="PullRequests">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Repository.Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>-->
+
+            <TextBlock Text="issues" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
+            <ListBox x:Name="Repositories"  BorderThickness="0" >
+                <ListBox.ItemTemplate>
+                    <DataTemplate  >
+                        <StackPanel Visibility="{Binding Issues, Converter={StaticResource LessThanOneHiddenConverter}}">
+                            <TextBlock Text="{Binding Path=Repository.Name}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="18" />
+                            <ListBox ItemsSource="{Binding Issues}" BorderThickness="0" />
+                        </StackPanel>
+                    </DataTemplate>
+
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
