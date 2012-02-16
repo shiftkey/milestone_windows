@@ -187,5 +187,15 @@ namespace Analects.Loader
         {
             return ReflectionOnlyLoadAssembly(args.Name);
         }
+
+        [System.STAThreadAttribute()]
+        public static void Main()
+        {
+            Initialize();
+
+            var app = new MilestoneForWindows.App();
+            app.InitializeComponent();
+            app.Run();
+        }
     }
 }
