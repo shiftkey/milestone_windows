@@ -8,33 +8,39 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Converters:LessThanOneHiddenConverter x:Key="LessThanOneHiddenConverter" />
+        <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
         <DataTemplate DataType="{x:Type Models:Issue}">
-            <StackPanel>
-                <TextBlock Text="{Binding Title}" />
+            <StackPanel Margin="0,0,0,15">
+                <TextBlock Text="{Binding Title}" FontSize="15" />
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock><Run Text="{Binding User.Login}" /> reported at <Run Text="{Binding CreatedAt}" /></TextBlock>
+                    <ItemsControl Margin="0,-5,0,0" ItemsSource="{Binding Labels}" IsHitTestVisible="False">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="10" BorderThickness="5">
+                                    <TextBlock Text="{Binding Name}" Margin="5,0,5,0" Foreground="White" FontSize="12" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="5">
-            <Image Source="{Binding User.AvatarUrl}" Width="96" Height="96" Stretch="UniformToFill"/>
-
-            <!--<TextBlock Text="pull requests" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
-            <ListBox x:Name="PullRequests">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Repository.Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>-->
-
             <TextBlock Text="issues" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
             <ListBox x:Name="Repositories"  BorderThickness="0" >
                 <ListBox.ItemTemplate>
                     <DataTemplate  >
-                        <StackPanel Visibility="{Binding Issues, Converter={StaticResource LessThanOneHiddenConverter}}">
-                            <TextBlock Text="{Binding Path=Repository.Name}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="18" />
+                        <StackPanel Visibility="{Binding Issues, Converter={StaticResource LessThanOneHiddenConverter}}" Margin="0,0,0,15">
+                            <TextBlock Text="{Binding Path=Repository.Name}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="24" />
                             <ListBox ItemsSource="{Binding Issues}" BorderThickness="0" />
                         </StackPanel>
                     </DataTemplate>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition.Hosting;
+using Analects.SettingsService;
 using Autofac;
 using MilestoneForWindows.ViewModels;
 
@@ -17,8 +18,10 @@ namespace MilestoneForWindows
 
 		protected override void ConfigureContainer(ContainerBuilder builder)
 		{
-			//builder.RegisterModule<ServicesModule>();
-			//builder.RegisterType<JumpListIntegration>().SingleInstance();
+		    builder
+                .RegisterType<SettingsService>()
+		        .AsImplementedInterfaces()
+		        .SingleInstance();
 		}
 	}
 }

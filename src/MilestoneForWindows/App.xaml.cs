@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace MilestoneForWindows
+﻿namespace MilestoneForWindows
 {
     public partial class App
     {

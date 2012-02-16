@@ -14,34 +14,18 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedSingleRowTabControl.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-                <ResourceDictionary>
-                    <Storyboard x:Key="LoginSlideDown">
-                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="Login">
-                            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
-                                <EasingDoubleKeyFrame.EasingFunction>
-                                    <CircleEase EasingMode="EaseOut"/>
-                                </EasingDoubleKeyFrame.EasingFunction>
-                            </EasingDoubleKeyFrame>
-                        </DoubleAnimationUsingKeyFrames>
-                    </Storyboard>
-                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
-    <Controls:MetroWindow.Triggers>
-        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard Storyboard="{StaticResource LoginSlideDown}"/>
-        </EventTrigger>
-    </Controls:MetroWindow.Triggers>
 
     <Grid>
         <TabControl x:Name="Contexts_Items">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding User.Login}" TextTrimming="CharacterEllipsis" MaxWidth="400">
+                        <TextBlock Text="{Binding DisplayName}" TextTrimming="CharacterEllipsis" MaxWidth="400">
                             <TextBlock.ToolTip>
-                                <ToolTip Content="{Binding User.Login}" />
+                                <ToolTip Content="{Binding DisplayName}" />
                             </TextBlock.ToolTip>
                         </TextBlock>
                     </StackPanel>
@@ -73,11 +57,27 @@
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding IsAuthenticated}" Value="False">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                                            <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
+                                                <EasingDoubleKeyFrame.EasingFunction>
+                                                    <CircleEase EasingMode="EaseOut"/>
+                                                </EasingDoubleKeyFrame.EasingFunction>
+                                            </EasingDoubleKeyFrame>
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty   = "Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.0"   Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ContentControl.Style>
         </ContentControl>
-        <!--<Controls:ProgressIndicator Visibility="{Binding HasProgress, Converter={StaticResource BoolToVisibilityConverter}}" Height="4" VerticalAlignment="Top" ProgressColour="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}"/>-->
-
     </Grid>
 </Controls:MetroWindow>

@@ -3,6 +3,7 @@ using MilestoneForWindows.Events;
 
 namespace MilestoneForWindows.ViewModels
 {
+    
     public class LoginViewModel : Screen
     {
         private readonly IEventAggregator _eventAggregator;

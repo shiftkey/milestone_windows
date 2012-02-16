@@ -1,8 +1,32 @@
 ﻿<Window x:Class="MilestoneForWindows.Views.NotificationView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="NotificationView" Height="300" Width="300">
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro" Foreground="White"
+        Title="NotificationView" Height="142" Width="426" Background="White">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colours.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>       
+    </Window.Resources>
+    
+    <i:Interaction.Behaviors>
+        <behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
+    </i:Interaction.Behaviors>
+    
     <Grid>
+    	<Grid.Background>
+    		<SolidColorBrush Color="{DynamicResource HighlightDarkColor}" />  	
+		</Grid.Background>
+    	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="Segoe UI Light" FontSize="29.333" Margin="8,8,0,0"><Run Language="en-au" Text="Markdown Syntax Help"/></TextBlock>
+    	<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8,47.016,0,0"><Run FontWeight="Bold" Language="en-au" Text="somebody"/><Run Language="en-au" Text=" reported an issue on "/><Run FontWeight="Bold" Language="en-au" Text="DownmarkerWPF"/></TextBlock>
+    	<Image HorizontalAlignment="Right" Height="48" Margin="0,14.976,8,0" Source="/MilestoneForWindows;component/Images/appbar.clock.png" Stretch="Fill" VerticalAlignment="Top" Width="48"/>
         
     </Grid>
 </Window>
