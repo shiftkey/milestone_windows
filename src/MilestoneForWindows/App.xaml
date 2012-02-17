@@ -16,6 +16,8 @@
                     <Converters:GravatarIdToUriConverter x:Key="GravatarIdToUriConverter" />
                     <Converters1:ToUpperConverter x:Key="ToUpperConverter" />
                     <Converters1:ToLowerConverter x:Key="ToLowerConverter" />
+                    <Converters:NumberToEmoteConverter x:Key="NumberToEmoteConverter" />
+                    <Converters:NumberToColourConverter x:Key="NumberToColourConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -109,6 +109,8 @@
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="Converters\DateToRelativeConverter.cs" />
     <Compile Include="Converters\GravatarIdToUriConverter.cs" />
+    <Compile Include="Converters\NumberToColourConverter.cs" />
+    <Compile Include="Converters\NumberToEmoteConverter.cs" />
     <Compile Include="Extensions\DispatcherExtensions.cs" />
     <Compile Include="PullRequestRepository.cs" />
     <Compile Include="ViewModels\PullRequestViewModel.cs" />
