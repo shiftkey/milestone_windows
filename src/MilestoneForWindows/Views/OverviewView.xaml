@@ -3,11 +3,113 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             >
     <UserControl.Resources>
+        <CollectionViewSource x:Key="cvs" Source="{Binding Issues}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="RepoName"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
 
+        <CollectionViewSource x:Key="cvsPullRequests" Source="{Binding PullRequests}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="RepoName"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </UserControl.Resources>
-    <Grid>
-        <ItemsControl ItemsSource="{Binding Contexts}" />
-    </Grid>
+    <ScrollViewer Margin="12">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+            	<Grid Height="130" Width="130" Margin="0,0,12,0">
+            		<Rectangle Fill="Red"/>
+            		<TextBlock Margin="4,8,4,0" TextWrapping="Wrap" FontSize="32" Foreground="White" FontFamily="Segoe UI Semibold" VerticalAlignment="Top"><Run Language="en-au" Text=":o"/></TextBlock>
+            		<TextBlock Margin="4" TextWrapping="Wrap" FontSize="18.667" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Bottom">
+                        <Run Text="{Binding PullRequests.Count, Mode=OneWay}" />
+                        <Run Text=" pull requests remaining"/>
+                    </TextBlock>
+            	</Grid>
+            	<Grid Height="130" Width="130" Margin="0,0,12,0">
+            		<Rectangle Fill="#FF199F06"/>
+            		<TextBlock Margin="4,0,4,4" TextWrapping="Wrap" FontSize="18.667" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Bottom">
+                        <Run Text="{Binding Issues.Count, Mode=OneWay}" />
+                        <Run Text=" reported issues to go"/>
+                    </TextBlock>
+            		<TextBlock Margin="4,8,4,0" TextWrapping="Wrap" FontSize="32" Foreground="White" FontFamily="Segoe UI Semibold" VerticalAlignment="Top"><Run Language="en-au" Text=":("/></TextBlock>
+            	</Grid>
+            	<!--<Grid Height="130" Width="130" Margin="0,0,12,0">
+            		<Rectangle Fill="#FF0090FF"/>
+            		<TextBlock Margin="4,0,4,4" TextWrapping="Wrap" FontSize="18.667" Foreground="White" FontFamily="Segoe UI Light" VerticalAlignment="Bottom"><Run Language="en-au" Text="no unread messages"/></TextBlock>
+            		<TextBlock Margin="4,8,4,0" TextWrapping="Wrap" FontSize="32" Foreground="White" FontFamily="Segoe UI Semibold" VerticalAlignment="Top"><Run Language="en-au" Text=":)"/></TextBlock>
+            	</Grid>-->
+            </StackPanel>
+            <TextBlock Text="reminders" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
+            <TextBlock Text="nothing to remind you about"/>
+            <TextBlock Text="pull requests" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30" Margin="0,12,0,0"/>
+            
+            <ListView BorderThickness="0" ItemsSource="{Binding Source={StaticResource cvsPullRequests}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel DataContext="{Binding Pull}" Margin="0,0,0,12">
+                            <TextBlock Text="{Binding Title}" FontSize="15" />
+                            <!--<TextBlock Text="{Binding Body}"  />-->
+
+                            <StackPanel Orientation="Horizontal">
+                                <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,5,0">
+                                    <Image Margin="2" Source="{Binding User.GravatarId, Converter={StaticResource GravatarIdToUriConverter}, ConverterParameter=15}" />
+                                </Border>
+                                <TextBlock><Run Foreground="{DynamicResource AccentColorBrush}" Text="{Binding User.Login, Converter={StaticResource ToLowerConverter}}" /><Run Text=" submitted "/><Run Text="{Binding CreatedAt, Converter={StaticResource DateToRelativeConverter}}" /></TextBlock>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate DataType="Group">
+                                <TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding Name, Converter={StaticResource ToUpperConverter}}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+               </ListView.GroupStyle>
+            </ListView>
+            
+            <TextBlock Text="issues" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
+            <ListView BorderThickness="0" ItemsSource="{Binding Source={StaticResource cvs}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,15" DataContext="{Binding Issue}">
+                            <TextBlock Text="{Binding Title}" FontSize="15" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock><Run Text="{Binding User.Login}" /><Run Text=" reported at "/><Run Text="{Binding CreatedAt, Converter={StaticResource DateToRelativeConverter}}" /></TextBlock>
+                                <ItemsControl Margin="0,-5,0,0" ItemsSource="{Binding Labels}" IsHitTestVisible="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="10" BorderThickness="5">
+                                                <TextBlock Text="{Binding Name}" Margin="5,0,5,0" Foreground="White" FontSize="12" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate DataType="Group">
+                                <TextBlock FontSize="10" FontWeight="SemiBold" Text="{Binding Name}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+               </ListView.GroupStyle>
+            </ListView>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

@@ -15,6 +15,8 @@ namespace MilestoneForWindows.ViewModels
 {
     public class ShellViewModel : Screen, IShell, IHandle<LoginEvent>
     {
+        private readonly IssueRepository _issues;
+        private readonly PullRequestRepository _pullrequests;
         private readonly ISettingsService _settings;
         public bool HasProgress { get; set; }
         public LoginViewModel Login { get; set; }
@@ -25,11 +27,15 @@ namespace MilestoneForWindows.ViewModels
         private readonly Action<GitHubException> _exceptionAction = ex => Console.WriteLine("Error: " + Enum.GetName(typeof(ErrorType), ex.ErrorType), "");
 
         public ShellViewModel(
+            IssueRepository issues,
+            PullRequestRepository pullrequests,
             ISettingsService settings,
-            LoginViewModel login, 
+            LoginViewModel login,
             ContextsViewModel contexts,
             OverviewViewModel overview)
         {
+            _issues = issues;
+            _pullrequests = pullrequests;
             _settings = settings;
             Login = login;
             Contexts = contexts;
@@ -93,7 +99,7 @@ namespace MilestoneForWindows.ViewModels
 
         private void EndRepos(ContextViewModel context, IEnumerable<Repository> repos)
         {
-            Application.Current.Dispatcher.BeginInvoke((ThreadStart) (() =>
+            Application.Current.Dispatcher.BeginInvoke((ThreadStart)(() =>
                                                                           {
                                                                               foreach (var r in repos)
                                                                               {
@@ -102,9 +108,30 @@ namespace MilestoneForWindows.ViewModels
 
                                                                                   if (repo.Repository.HasIssues)
                                                                                       GetIssues(repo);
+
+                                                                                  GetPullRequests(repo);
                                                                               }
                                                                           }));
         }
+
+        private void GetPullRequests(Repo repo)
+        {
+            _client.PullRequests.GetPullRequestsAsync(
+                repo.Repository.Owner.Login,
+                repo.Repository.Name, State.Open,
+                0,
+                pullrequests => EndPullRequests(pullrequests, repo),
+                _exceptionAction);
+        }
+
+        private void EndPullRequests(IEnumerable<PullRequest> pullrequests, Repo repo)
+        {
+            foreach (var pr in pullrequests)
+            {
+                _pullrequests.Add(new PullRequestViewModel(pr, repo));
+            }
+        }
+
         public void GetIssues(Repo r)
         {
             _client.Issues.GetIssuesAsync(r.Repository.Owner.Login, r.Repository.Name, State.Open, 0, issues => EndIssues(issues, r), _exceptionAction);
@@ -112,10 +139,13 @@ namespace MilestoneForWindows.ViewModels
 
         private void EndIssues(IEnumerable<Issue> issues, Repo r)
         {
-            Application.Current.Dispatcher.BeginInvoke((ThreadStart) (() =>
+            Application.Current.Dispatcher.BeginInvoke((ThreadStart)(() =>
                                                                           {
                                                                               foreach (var i in issues)
+                                                                              {
                                                                                   r.Issues.Add(i);
+                                                                                  _issues.Add(new IssueViewModel(i, r));
+                                                                              }
                                                                           }));
         }
     }

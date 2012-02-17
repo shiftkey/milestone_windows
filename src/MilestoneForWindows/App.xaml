@@ -1,13 +1,21 @@
 ﻿<Application x:Class="MilestoneForWindows.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:MilestoneForWindows"
-             xmlns:XAMLConverters="clr-namespace:Analects.XAMLConverters">
+             xmlns:XAMLConverters="clr-namespace:Analects.XAMLConverters"
+             xmlns:Converters="clr-namespace:MilestoneForWindows.Converters"
+             xmlns:Converters1="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="bootstrapper" />
+                    <Converters:LessThanOneHiddenConverter x:Key="LessThanOneHiddenConverter" />
+                    <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
                     <XAMLConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+                    <Converters:DateToRelativeConverter x:Key="DateToRelativeConverter" />
+                    <Converters:GravatarIdToUriConverter x:Key="GravatarIdToUriConverter" />
+                    <Converters1:ToUpperConverter x:Key="ToUpperConverter" />
+                    <Converters1:ToLowerConverter x:Key="ToLowerConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

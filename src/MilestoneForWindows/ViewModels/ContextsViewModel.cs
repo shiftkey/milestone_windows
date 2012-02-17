@@ -4,7 +4,6 @@ using Caliburn.Micro;
 
 namespace MilestoneForWindows.ViewModels
 {
-    
     public class ContextsViewModel : Conductor<IScreen>.Collection.OneActive
     {
         public OverviewViewModel Overview { get; set; }
@@ -23,7 +22,8 @@ namespace MilestoneForWindows.ViewModels
                 Overview = (OverviewViewModel)screen;
             }
 
-            ActivateItem(screen);
+            Items.Add(screen);
+            //ActivateItem(screen);
         }
     }
 }

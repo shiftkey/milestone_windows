@@ -22,6 +22,16 @@ namespace MilestoneForWindows
                 .RegisterType<SettingsService>()
 		        .AsImplementedInterfaces()
 		        .SingleInstance();
+
+            builder
+                .RegisterType<IssueRepository>()
+                .AsSelf()
+                .SingleInstance();
+
+            builder
+                .RegisterType<PullRequestRepository>()
+                .AsSelf()
+                .SingleInstance();
 		}
 	}
 }

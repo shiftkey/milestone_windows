@@ -7,8 +7,7 @@
              xmlns:Converters="clr-namespace:MilestoneForWindows.Converters" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <Converters:LessThanOneHiddenConverter x:Key="LessThanOneHiddenConverter" />
-        <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+
         <DataTemplate DataType="{x:Type Models:Issue}">
             <StackPanel Margin="0,0,0,15">
                 <TextBlock Text="{Binding Title}" FontSize="15" />
