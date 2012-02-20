@@ -14,56 +14,54 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Red.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        	<Storyboard x:Key="Storyboard1">
-        		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="grid">
-        			<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-448">
-        				<EasingDoubleKeyFrame.EasingFunction>
-        					<CircleEase EasingMode="EaseIn"/>
-        				</EasingDoubleKeyFrame.EasingFunction>
-        			</EasingDoubleKeyFrame>
-        		</DoubleAnimationUsingKeyFrames>
-        	</Storyboard>
-        </ResourceDictionary>       
+            <Storyboard x:Key="Storyboard1">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="grid">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-448">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <CircleEase EasingMode="EaseIn"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </ResourceDictionary>
     </Window.Resources>
-	<Window.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
-		</EventTrigger>
-	</Window.Triggers>
-    
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
     <i:Interaction.Behaviors>
         <behaviours:BorderlessWindowBehavior ResizeWithGrip="True" />
     </i:Interaction.Behaviors>
-    
-    <Grid>
 
-        
-    	<Grid>
-    		    	<Grid.Background>
-    		<SolidColorBrush Color="{DynamicResource HighlightDarkColor}" />  	
-		</Grid.Background>
-    		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="29.333" Margin="8,0,8,8" d:LayoutOverrides="Height"><Run Language="en-au" Text="Markdown Syntax Help"/></TextBlock>
-    		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8,39.016,8,8"><Run FontWeight="Bold" Language="en-au" Text="somebody"/><Run Language="en-au" Text=" reported an issue on "/><Run FontWeight="Bold" Language="en-au" Text="DownmarkerWPF"/></TextBlock>
-    		<Image HorizontalAlignment="Right" Height="48" Margin="8,6.976,8,8" Source="/MilestoneForWindows;component/Images/appbar.clock.png" Stretch="Fill" VerticalAlignment="Top" Width="48"/>
-        
-    	</Grid>
-    	<Grid x:Name="grid" HorizontalAlignment="Right" Margin="0,0,-448,0" Width="438" RenderTransformOrigin="0.5,0.5">
-    		<Grid.RenderTransform>
-    			<TransformGroup>
-    				<ScaleTransform/>
-    				<SkewTransform/>
-    				<RotateTransform/>
-    				<TranslateTransform/>
-    			</TransformGroup>
-    		</Grid.RenderTransform>
-    		    	<Grid.Background>
-    		<SolidColorBrush Color="#FF06CB00" />  	
-		</Grid.Background>
-    		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="29.333" Margin="8,0,8,15.959" d:LayoutOverrides="Height"><Run Language="en-au" Text="Awesome Features"/></TextBlock>
-    		<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8,39.016,8,0"><Run FontWeight="Bold" Language="en-au" Text="somebody"/><Run Language="en-au" Text=" has sent a pull request to"/><Run FontWeight="Bold" Language="en-au" Text=" DownmarkerWPF"/><LineBreak/><Run FontWeight="Bold" Language="en-au"/><LineBreak/><Run FontWeight="Bold" Language="en-au" Text="And it auto merges!"/></TextBlock>
-    		<Image HorizontalAlignment="Right" Height="48" Margin="8,6.976,8,0" Source="/MilestoneForWindows;component/Images/appbar.clock.png" Stretch="Fill" VerticalAlignment="Top" Width="48"/>
-        
-    	</Grid>
-        
+    <Grid>
+        <Grid>
+            <Grid.Background>
+                <SolidColorBrush Color="{DynamicResource HighlightDarkColor}" />
+            </Grid.Background>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="29.333" Margin="8,0,8,8" d:LayoutOverrides="Height"><Run Language="en-au" Text="Markdown Syntax Help"/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8,39.016,8,8"><Run FontWeight="Bold" Language="en-au" Text="somebody"/><Run Language="en-au" Text=" reported an issue on "/><Run FontWeight="Bold" Language="en-au" Text="DownmarkerWPF"/></TextBlock>
+            <Image HorizontalAlignment="Right" Height="48" Margin="8,6.976,8,8" Source="/MilestoneForWindows;component/Images/appbar.clock.png" Stretch="Fill" VerticalAlignment="Top" Width="48"/>
+
+        </Grid>
+        <Grid x:Name="grid" HorizontalAlignment="Right" Margin="0,0,-448,0" Width="438" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.Background>
+                <SolidColorBrush Color="#FF06CB00" />
+            </Grid.Background>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="29.333" Margin="8,0,8,15.959" d:LayoutOverrides="Height"><Run Language="en-au" Text="Awesome Features"/></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="8,39.016,8,0"><Run FontWeight="Bold" Language="en-au" Text="somebody"/><Run Language="en-au" Text=" has sent a pull request to"/><Run FontWeight="Bold" Language="en-au" Text=" DownmarkerWPF"/><LineBreak/><Run FontWeight="Bold" Language="en-au"/><LineBreak/><Run FontWeight="Bold" Language="en-au" Text="And it auto merges!"/></TextBlock>
+            <Image HorizontalAlignment="Right" Height="48" Margin="8,6.976,8,0" Source="/MilestoneForWindows;component/Images/appbar.clock.png" Stretch="Fill" VerticalAlignment="Top" Width="48"/>
+
+        </Grid>
+
     </Grid>
 </Window>

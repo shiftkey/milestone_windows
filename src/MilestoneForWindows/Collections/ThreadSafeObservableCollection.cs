@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Threading;
 using System.Threading;
-using MilestoneForWindows.Extensions;
+using MilestoneForWindows.Core.Extensions;
 
 // http://khason.net/blog/how-to-disconnect-ui-and-data-in-wpf-cachedobservablecollection-and-some-updates-regarding-threadsafeobservablecollection/
-namespace MilestoneForWindows
+namespace MilestoneForWindows.Collections
 {
     /// <summary>
     /// Observable collection with support for multi-threaded calls
@@ -36,7 +35,7 @@ namespace MilestoneForWindows
         /// </summary>
         protected override void ClearItems()
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 LockCookie c = _lock.UpgradeToWriterLock(-1);
                 base.ClearItems();
@@ -44,7 +43,7 @@ namespace MilestoneForWindows
             }
             else
             {
-                Application.Current.Dispatcher.Execute(Clear);
+                System.Windows.Application.Current.Dispatcher.Execute(Clear);
             }
         }
 
@@ -55,7 +54,7 @@ namespace MilestoneForWindows
         /// <param name="item">Item to insert</param>
         protected override void InsertItem(int index, T item)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 if (index > this.Count)
                     return;
@@ -66,7 +65,7 @@ namespace MilestoneForWindows
             else
             {
                 object[] e = new object[] { index, item };
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { InsertItem(index, item); }, e);
+                System.Windows.Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { InsertItem(index, item); }, e);
             }
         }
 
@@ -113,14 +112,14 @@ namespace MilestoneForWindows
         /// <param name="item">Item to remove</param>
         public new void Remove(T item)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 int idx = base.IndexOf(item);
                 this.RemoveItem(idx);
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { Remove(item); }, item);
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { Remove(item); }, item);
             }
         }
 
@@ -141,7 +140,7 @@ namespace MilestoneForWindows
         /// <param name="newIndex">Destination index</param>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 if (oldIndex >= this.Count | newIndex >= this.Count | oldIndex == newIndex)
                     return;
@@ -152,19 +151,19 @@ namespace MilestoneForWindows
             else
             {
                 object[] e = new object[] { oldIndex, newIndex };
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { MoveItemImpl(e); }, e);
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { MoveItemImpl(e); }, e);
             }
         }
 
         private void MoveItemImpl(object[] e)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 MoveItem((int)e[0], (int)e[1]);
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { MoveItemImpl(e); });
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { MoveItemImpl(e); });
             }
         }
 
@@ -175,7 +174,7 @@ namespace MilestoneForWindows
         protected override void RemoveItem(int index)
         {
 
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 if (index >= this.Count)
                     return;
@@ -185,7 +184,7 @@ namespace MilestoneForWindows
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { RemoveItem(index); }, index);
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { RemoveItem(index); }, index);
             }
         }
 
@@ -196,7 +195,7 @@ namespace MilestoneForWindows
         /// <param name="item">Item to set</param>
         protected override void SetItem(int index, T item)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 LockCookie c = _lock.UpgradeToWriterLock(-1);
                 base.SetItem(index, item);
@@ -205,19 +204,19 @@ namespace MilestoneForWindows
             else
             {
                 object[] e = new object[] { index, item };
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { SetItemImpl(e); }, e);
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { SetItemImpl(e); }, e);
             }
         }
 
         private void SetItemImpl(object[] e)
         {
-            if (Application.Current.Dispatcher.CheckAccess())
+            if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             {
                 SetItem((int)e[0], (T)e[1]);
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { SetItemImpl(e); });
+                System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.DataBind, (SendOrPostCallback)delegate { SetItemImpl(e); });
             }
         }
 

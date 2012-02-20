@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace MilestoneForWindows.Extensions
+namespace MilestoneForWindows.Core.Extensions
 {
     public static class DispatcherExtensions
     {

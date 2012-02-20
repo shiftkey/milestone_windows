@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:MilestoneForWindows"
              xmlns:XAMLConverters="clr-namespace:Analects.XAMLConverters"
              xmlns:Converters="clr-namespace:MilestoneForWindows.Converters"
-             xmlns:Converters1="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro">
+             xmlns:Converters1="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro"
+             xmlns:Application="clr-namespace:MilestoneForWindows.Application">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
-                    <local:AppBootstrapper x:Key="bootstrapper" />
+                    <Application:AppBootstrapper x:Key="bootstrapper" />
                     <Converters:LessThanOneHiddenConverter x:Key="LessThanOneHiddenConverter" />
                     <Converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
                     <XAMLConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

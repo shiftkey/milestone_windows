@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
+using MilestoneForWindows.Repositories;
 
 
 namespace MilestoneForWindows.ViewModels
@@ -16,7 +17,6 @@ namespace MilestoneForWindows.ViewModels
             Issues = issues;
             PullRequests = pullRequest;
             Contexts = new ObservableCollection<ContextViewModel>();
-            //Contexts.SelectMany(c => c.Repositories).SelectMany(r => r.Issues);
         }
     }
 }
