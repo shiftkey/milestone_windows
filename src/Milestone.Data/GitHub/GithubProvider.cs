@@ -38,9 +38,12 @@ namespace Milestone.Core.GitHub
             return NGitHub<IEnumerable<User>, string, int>(_client.Organizations.GetOrganizationsAsync, username, page);
         }
 
-        public Task<IEnumerable<Repository>> GetProjects(string username, int page=0)
+        public Task<IEnumerable<Repository>> GetProjects(Models.User user, int page=0)
         {
-            return NGitHub<IEnumerable<Repository>, string, int>(_client.Repositories.GetRepositoriesAsync, username, page);
+            //if (user.IsOrganisation)
+            //    return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(_client.Organizations., user.Username, page, RepositoryTypes.Member);
+            //else
+            return NGitHub<IEnumerable<Repository>, string, int, RepositoryTypes>(_client.Repositories.GetRepositoriesAsync, user.Username, page, RepositoryTypes.All);
         }
 
         public void GetProject()

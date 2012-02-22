@@ -1,5 +1,7 @@
-﻿using Analects.SettingsService;
+﻿using System;
+using Analects.SettingsService;
 using Caliburn.Micro;
+using Milestone.Core.GitHub;
 using Milestone.Core.Interfaces;
 using MilestoneForWindows.Application.Interfaces;
 using MilestoneForWindows.Events;
@@ -54,7 +56,6 @@ namespace MilestoneForWindows.ViewModels
 
             if (settings.ContainsKey("username") && settings.ContainsKey("password"))
                 PerformLogin(settings.Get<string>("username"), settings.Get<string>("password"));
-
         }
 
         public void PerformLogin(string username, string password)
@@ -79,38 +80,39 @@ namespace MilestoneForWindows.ViewModels
 
             foreach (var u in _users)
             {
-                var context = new ContextViewModel { User = u };
+                var context = new ContextViewModel(_issues,  u);
                 Contexts.Open(context);
             }
         }
 
         public async void GetContext()
         {
+
             var user = await _provider.GetUser();
             _users.Add(user);
 
             var orgs = await _provider.GetOrganisations(user.Login);
 
             foreach (var o in orgs)
-                _users.Add(o);
+                _users.Add(o, true);
 
             _users.Save();
 
             foreach (var u in _users)
             {
-                var projects = await _provider.GetProjects(u.Username);
+                var projects = await _provider.GetProjects(u);
                 foreach (var p in projects)
                 {
                     if (!p.HasIssues)
                         continue;
 
-                    var issues = await _provider.GetIssues(u.Username, p.Name);
+                    var issues = await _provider.GetIssues(p.Owner.Login, p.Name);
                     foreach (var i in issues)
                     {
                         _issues.Add(new IssueViewModel(i, p));
                     }
 
-                    var pullrequests = await _provider.GetPullRequests(u.Username, p.Name);
+                    var pullrequests = await _provider.GetPullRequests(p.Owner.Login, p.Name);
                     foreach (var pr in pullrequests)
                     {
                         _pullrequests.Add(new PullRequestViewModel(pr, p));

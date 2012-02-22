@@ -10,14 +10,16 @@ namespace MilestoneForWindows.ViewModels
     public class ContextsViewModel : Conductor<IScreen>.Collection.OneActive
     {
         private readonly UserRepository _users;
+        private readonly IssueRepository _issues;
 
         public OverviewViewModel Overview { get; set; }
 
-        public ContextsViewModel(UserRepository users)
+        public ContextsViewModel(UserRepository users, IssueRepository issues)
         {
             _users = users;
+            _issues = issues;
             foreach (var u in _users)
-                Open(new ContextViewModel {User = u});
+                Open(new ContextViewModel(_issues, u));
             _users.CollectionChanged += UsersCollectionChanged;
         }
 
@@ -25,25 +27,15 @@ namespace MilestoneForWindows.ViewModels
         {
             if (e.Action != NotifyCollectionChangedAction.Add) return;
             foreach (var i in e.NewItems)
-                Open(new ContextViewModel { User = (User)i});
+                Open(new ContextViewModel(_issues, (User)i));
         }
 
         public void Open(IScreen screen)
         {
-            if (screen is ContextViewModel)
-            {
-                if (Overview != null)
-                {
-                    System.Windows.Application.Current.Dispatcher.BeginInvoke((ThreadStart)(() => Overview.Contexts.Add((ContextViewModel)screen)));
-                }
-            }
-            else if (screen is OverviewViewModel)
-            {
+            if (screen is OverviewViewModel)
                 Overview = (OverviewViewModel)screen;
-            }
 
             Items.Add(screen);
-            //ActivateItem(screen);
         }
     }
 }

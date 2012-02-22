@@ -3,49 +3,125 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Models="clr-namespace:NGitHub.Models;assembly=NGitHub"
-             xmlns:Converters="clr-namespace:MilestoneForWindows.Converters" mc:Ignorable="d" 
+             xmlns:Models="clr-namespace:NGitHub.Models;assembly=NGitHub" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
 
-        <DataTemplate DataType="{x:Type Models:Issue}">
-            <StackPanel Margin="0,0,0,15">
-                <TextBlock Text="{Binding Title}" FontSize="15" />
+        <CollectionViewSource x:Key="cvs" Source="{Binding Issues}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="RepoName"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock><Run Text="{Binding User.Login}" /> reported at <Run Text="{Binding CreatedAt}" /></TextBlock>
-                    <ItemsControl Margin="0,-5,0,0" ItemsSource="{Binding Labels}" IsHitTestVisible="False">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="10" BorderThickness="5">
-                                    <TextBlock Text="{Binding Name}" Margin="5,0,5,0" Foreground="White" FontSize="12" />
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </StackPanel>
-        </DataTemplate>
+        <CollectionViewSource x:Key="cvsPullRequests" Source="{Binding PullRequests}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="RepoName"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+        
+        <Style TargetType="{x:Type ListViewItem}" x:Key="PullRequestStyle">
+            <Setter Property="Foreground" Value="{DynamicResource BlackBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="25" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Border.BorderBrush" Value="{DynamicResource Grey3}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" Margin="-12,0,0,0" Padding="12,2,2,2">
+                            <Grid DataContext="{Binding Pull}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{Binding Title}" Grid.Row="0" FontSize="15" VerticalAlignment="Top" />
+                                <TextBlock Text="{Binding Body}" x:Name="Body" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" />
+                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                    <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,5,0">
+                                        <Image Margin="2" Source="{Binding User.GravatarId, ConverterParameter=15, Converter={StaticResource GravatarIdToUriConverter}}" />
+                                    </Border>
+                                    <TextBlock><Run Foreground="{DynamicResource AccentColorBrush}" Text="{Binding User.Login, Converter={StaticResource ToLowerConverter}}" /><Run Text=" submitted "/><Run Text="{Binding CreatedAt, Converter={StaticResource DateToRelativeConverter}}" /></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="false">
+                                <Setter TargetName="Body" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="#FF143c65" />
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource AccentColorBrush}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="{DynamicResource AccentColor3}" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                    <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" TargetName="Bd">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="{DynamicResource AccentColor2}" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="#FF143c65" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="5">
-            <TextBlock Text="issues" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30"/>
-            <ListBox x:Name="Repositories"  BorderThickness="0" >
-                <ListBox.ItemTemplate>
-                    <DataTemplate  >
-                        <StackPanel Visibility="{Binding Issues, Converter={StaticResource LessThanOneHiddenConverter}}" Margin="0,0,0,15">
-                            <TextBlock Text="{Binding Path=Repository.Name}" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="24" />
-                            <ListBox ItemsSource="{Binding Issues}" BorderThickness="0" />
+            <TextBlock Text="issues" FontFamily="{DynamicResource HeaderFontFamily}" FontSize="30" Margin="0,12,0,0"/>
+            <ListView BorderThickness="0" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ItemsSource="{Binding Source={StaticResource cvs}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,15" DataContext="{Binding Issue}">
+                            <TextBlock Text="{Binding Title}" FontSize="15" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock><Run Text="{Binding User.Login}" /><Run Text=" reported at "/><Run Text="{Binding CreatedAt, Converter={StaticResource DateToRelativeConverter}}" /></TextBlock>
+                                <ItemsControl Margin="0,-5,0,0" ItemsSource="{Binding Labels}" IsHitTestVisible="False">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{Binding Color, Converter={StaticResource ColorToBrushConverter}}" CornerRadius="10" BorderThickness="5">
+                                                <TextBlock Text="{Binding Name}" Margin="5,0,5,0" Foreground="White" FontSize="12" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </StackPanel>
                     </DataTemplate>
-
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </ListView.ItemTemplate>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate DataType="Group">
+                                <TextBlock FontSize="10" FontWeight="SemiBold" Text="{Binding Name}" />
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

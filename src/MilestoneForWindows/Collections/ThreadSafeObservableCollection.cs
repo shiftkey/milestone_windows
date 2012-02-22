@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using System.Threading;
-using MilestoneForWindows.Core.Extensions;
+using MilestoneForWindows.Extensions;
 
 // http://khason.net/blog/how-to-disconnect-ui-and-data-in-wpf-cachedobservablecollection-and-some-updates-regarding-threadsafeobservablecollection/
 namespace MilestoneForWindows.Collections

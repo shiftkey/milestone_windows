@@ -11,13 +11,14 @@ namespace MilestoneForWindows.Repositories
 
         }
 
-        public User Add(NGitHub.Models.User user)
+        public User Add(NGitHub.Models.User user, bool isOrg = false)
         {
             var localUser = new User
                                 {
                                     Username = user.Login,
                                     GravatarId = user.GravatarId,
-                                    Name = user.Name
+                                    Name = user.Name,
+                                    IsOrganisation = isOrg
                                 };
 
             Add(localUser);

@@ -9,6 +9,8 @@ namespace Milestone.Core.Models
         public string Name { get; set; }
         public string GravatarId { get; set; }
         public Uri Gravatar { get { return new Uri("http://www.gravatar.com/avatar/" + GravatarId); } }
+
+        public bool IsOrganisation { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
